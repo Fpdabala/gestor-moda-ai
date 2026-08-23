@@ -1,0 +1,1 @@
+# gestor-moda-ai
