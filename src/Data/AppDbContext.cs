@@ -10,4 +10,6 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Categoria> Categorias => Set<Categoria>();
+    public DbSet<Peca> Pecas => Set<Peca>();
+    public DbSet<Cliente> Clientes => Set<Cliente>();
 }
