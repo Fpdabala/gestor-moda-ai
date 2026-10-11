@@ -21,6 +21,6 @@ public class Peca
 	[Range(0, 10000, ErrorMessage = "O estoque não pode ser negativo.")]
 	public int Estoque { get; set; }
 
-	// Decisão de Arquitetura exigida pela banca: Exclusão Lógica
+	// Decisão de Arquitetura exigida: Exclusão Lógica
 	public bool Ativo { get; set; } = true;
 }
