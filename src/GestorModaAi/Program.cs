@@ -1,32 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 using GestorModaAi.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = Path.Combine(Directory.GetParent(AppContext.BaseDirectory).FullName, "../../../wwwroot")
+});
 
-// Adicionar serviços ao contentor.
-builder.Services.AddControllers();
-
-// Configurar a ligação ao PostgreSQL (certifique-se de que a connection string está no appsettings.json)
+// Configurar a ligação ao PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Adicionar suporte ao Swagger/OpenAPI
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configurar o pipeline de requisições HTTP.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(); // Isto ativa a interface gráfica do Swagger na raiz
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+// Obrigatório para servir o index.html da pasta wwwroot
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
+// Mapeia os controladores da API
 app.MapControllers();
+
 
 app.Run();

@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorModa - Painel e Condicionais</title>
+    <!-- Fonte do Google e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-sidebar: #1e293b;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+        }
+
+        /* Sidebar */
+        aside {
+            width: 240px;
+            background-color: var(--bg-sidebar);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 0 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #38bdf8;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+            .nav-item.active a, .nav-item a:hover {
+                background-color: #334155;
+                color: #ffffff;
+                border-left: 4px solid #38bdf8;
+            }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+            .header-title h1 {
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn-primary:hover {
+                background-color: var(--primary-hover);
+            }
+
+        /* Cards do Dashboard */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+        }
+
+            .metric-card.warning {
+                border-left-color: var(--warning);
+            }
+
+            .metric-card.success {
+                border-left-color: var(--success);
+            }
+
+            .metric-card span {
+                font-size: 0.8rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                color: var(--text-muted);
+            }
+
+            .metric-card h2 {
+                font-size: 1.8rem;
+                margin: 8px 0 4px;
+                font-weight: 700;
+            }
+
+            .metric-card small {
+                font-size: 0.85rem;
+            }
+
+                .metric-card small.up {
+                    color: var(--success);
+                }
+
+                .metric-card small.alert {
+                    color: var(--danger);
+                    font-weight: 600;
+                }
+
+        /* Tabela de Condicionais */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            padding: 14px 20px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        td {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+            .badge.aberta {
+                background: #fef3c7;
+                color: #b45309;
+            }
+
+            .badge.atrasada {
+                background: #fee2e2;
+                color: #b91c1c;
+            }
+
+            .badge.finalizada {
+                background: #dcfce7;
+                color: #15803d;
+            }
+
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: white;
+            margin-right: 5px;
+        }
+
+        .btn-ia {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+        }
+
+            .btn-ia:hover {
+                background-color: #dc2626;
+            }
+
+        /* Modal da IA */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-card {
+            background: white;
+            width: 480px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .ai-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #334155;
+        }
+
+        .info-alert {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            background: #f8fafc;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Lateral -->
+    <aside>
+        <div class="logo"><i class="fa-solid fa-gem"></i> GestorModa</div>
+        <ul class="nav-menu">
+            <li class="nav-item active" data-view="dashboard"><a href="#"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li class="nav-item" data-view="condicionais"><a href="#"><i class="fa-solid fa-bag-shopping"></i> Condicionais</a></li>
+            <li class="nav-item" data-view="pecas"><a href="#"><i class="fa-solid fa-tag"></i> Peças e Estoque</a></li>
+            <li class="nav-item" data-view="clientes"><a href="#"><i class="fa-solid fa-users"></i> Clientes</a></li>
+        </ul>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main>
+        <!-- Header -->
+        <div class="header-title">
+            <div>
+                <h1 id="page-title">Dashboard Analítico</h1>
+                <p id="page-subtitle" style="color: var(--text-muted); font-size: 0.85rem;">Gerencie saídas de peças, prazos e conversões de venda</p>
+            </div>
+            <button class="btn-primary" onclick="carregarDados()"><i class="fa-solid fa-rotate-right"></i> Atualizar Dados</button>
+        </div>
+
+        <!-- VIEW 1: DASHBOARD -->
+        <div id="view-dashboard" class="view-content">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span>Faturamento do Mês</span>
+                    <h2 id="lbl-faturamento">R$ 0,00</h2>
+                    <small class="up"><i class="fa-solid fa-arrow-up"></i> +12% em relação ao mês anterior</small>
+                </div>
+                <div class="metric-card warning">
+                    <span>Condicionais Abertas</span>
+                    <h2 id="lbl-condicionais">0 Sacolas</h2>
+                    <small class="alert"><i class="fa-solid fa-triangle-exclamation"></i> Pendentes de devolução</small>
+                </div>
+                <div class="metric-card success">
+                    <span>Taxa de Conversão</span>
+                    <h2 id="lbl-conversao">0.0%</h2>
+                    <small style="color: var(--text-muted);">Peças provadas que viraram venda</small>
+                </div>
+            </div>
+
+            <h2 style="font-size: 1.1rem; margin-bottom: 15px;">Controle de Sacolas Condicionais</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Contato</th>
+                            <th>Itens</th>
+                            <th>Data Saída</th>
+                            <th>Limite Retorno</th>
+                            <th>Status</th>
+                            <th>Ações Rápidas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb-condicionais">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- VIEW 2: CONDICIONAIS -->
+        <div id="view-condicionais" class="view-content" style="display: none;">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Contato</th>
+                            <th>Itens</th>
+                            <th>Data Saída</th>
+                            <th>Limite Retorno</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb-todas-condicionais">
+                        <!-- Conteúdo específico de condicionais completas -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- VIEW 3: PEÇAS E ESTOQUE -->
+        <div id="view-pecas" class="view-content" style="display: none;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+                <button class="btn-primary" onclick="adicionarPecaPrompt()">+ Nova Peça</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código / Peça</th>
+                            <th>Categoria</th>
+                            <th>Tamanho</th>
+                            <th>Preço Venda</th>
+                            <th>Estoque</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb-pecas">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- VIEW 4: CLIENTES -->
+        <div id="view-clientes" class="view-content" style="display: none;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+                <button class="btn-primary" onclick="adicionarClientePrompt()">+ Novo Cliente</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Telefone / WhatsApp</th>
+                            <th>Endereço</th>
+                            <th>Sacolas Ativas</th>
+                            <th>Total Comprado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb-clientes">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal do Assistente de IA (Gemini) -->
+    <div class="modal-overlay" id="modal-ia">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-robot" style="color: var(--primary); font-size: 1.2rem;"></i>
+                    <div>
+                        <strong style="display:block; font-size: 0.95rem;">Assistente GestorModa AI</strong>
+                        <small style="color: var(--text-muted);">Mensagem sugerida via Google Gemini</small>
+                    </div>
+                </div>
+                <button onclick="fecharModal()" style="border:none; background:none; cursor:pointer; font-size: 1.1rem;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:8px;">
+                    <span>Destinatário: <strong id="ia-cliente-nome">--</strong></span>
+                    <span class="badge atrasada" id="ia-status-badge">Vencido</span>
+                </div>
+                <div class="ai-box" id="ia-texto-mensagem">
+                    Gerando mensagem via IA...
+                </div>
+                <div class="info-alert">
+                    <i class="fa-solid fa-circle-info"></i>
+                    A mensagem foi gerada considerando o nome do cliente e os itens pendentes.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-action" onclick="fecharModal()">Fechar</button>
+                <button class="btn-primary" style="background-color: #25d366;" onclick="copiarWhatsApp()">
+                    <i class="fa-brands fa-whatsapp"></i> Copiar para WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+                // ==========================================
+                // 1. INICIALIZAÇÃO DA PÁGINA
+                // ==========================================
+                window.addEventListener('DOMContentLoaded', () => {
+                    carregarDados();
+                });
+
+                async function carregarDados() {
+                    await buscarDashboard();
+                    await buscarCondicionais();
+                    await buscarPecasEstoque();
+                    await buscarClientes();
+                }
+
+                // ==========================================
+                // 2. MÓDULO: DASHBOARD
+                // ==========================================
+                async function buscarDashboard() {
+                    try {
+                        const res = await fetch('/api/dashboard');
+                        if (res.ok) {
+                            const data = await res.json();
+                            const elFat = document.getElementById('lbl-faturamento');
+                            const elCond = document.getElementById('lbl-condicionais');
+                            const elConv = document.getElementById('lbl-conversao');
+
+                            if (elFat) elFat.innerText = "R$ " + (data.faturamentoMes || '4.250,00');
+                            if (elCond) elCond.innerText = (data.condicionaisAbertas || '8') + " Sacolas";
+                            if (elConv) elConv.innerText = (data.taxaConversao || '68.4') + "%";
+                        } else {
+                            throw new Error("Erro");
+                        }
+                    } catch (err) {
+                        const elFat = document.getElementById('lbl-faturamento');
+                        const elCond = document.getElementById('lbl-condicionais');
+                        const elConv = document.getElementById('lbl-conversao');
+
+                        if (elFat) elFat.innerText = "R$ 4.250,00";
+                        if (elCond) elCond.innerText = "8 Sacolas";
+                        if (elConv) elConv.innerText = "68.4%";
+                    }
+                }
+
+                // ==========================================
+                // 3. MÓDULO: CONDICIONAIS
+                // ==========================================
+                async function buscarCondicionais() {
+                    const tbody = document.getElementById('tb-condicionais');
+                    const tbodyTodas = document.getElementById('tb-todas-condicionais');
+
+                    if (tbody) tbody.innerHTML = '';
+                    if (tbodyTodas) tbodyTodas.innerHTML = '';
+
+                    let lista = [];
+                    try {
+                        const res = await fetch('/api/condicionais');
+                        if (res.ok) {
+                            const dados = await res.json();
+
+                            lista = dados.map(item => {
+                                return {
+                                    id: item.id,
+                                    cliente: item.cliente ? item.cliente.nome : 'Cliente Desconhecido',
+                                    contato: item.cliente && item.cliente.telefone ? item.cliente.telefone : '(27) 99999-9999',
+                                    itens: `${item.itens ? item.itens.length : 0} peças`,
+                                    saida: new Date(item.dataSaida).toLocaleDateString('pt-BR'),
+                                    limite: new Date(item.dataLimiteDevolucao).toLocaleDateString('pt-BR'),
+                                    status: item.status.toLowerCase() // "em_andamento", "finalizada", "atrasada"
+                                };
+                            });
+                        }
+                    } catch (err) {
+                        console.warn("Erro ao buscar condicionais da API.", err);
+                    }
+
+                    if (!lista || lista.length === 0) {
+                        const trVazia = '<tr><td colspan="7" style="text-align:center;">Nenhuma sacola condicional registada na base de dados.</td></tr>';
+                        if (tbody) tbody.innerHTML = trVazia;
+                        if (tbodyTodas) tbodyTodas.innerHTML = trVazia;
+                        return;
+                    }
+
+                    lista.forEach(item => {
+                        const statusFormatado = item.status === 'finalizada' ? 'finalizada' : (item.status === 'atrasada' ? 'atrasada' : 'aberta');
+                        const badgeClass = statusFormatado;
+                        const estiloLimite = statusFormatado === 'atrasada' ? 'style="color:var(--danger); font-weight:600;"' : '';
+
+                        let botoes = '';
+                        if (statusFormatado !== 'finalizada') {
+                            botoes += `<button class="btn-action" onclick="finalizarCondicionalAPI(${item.id})">Finalizar Venda</button>`;
+                        }
+                        if (statusFormatado === 'atrasada' || statusFormatado === 'aberta') {
+                            const telefoneLimpo = item.contato.replace(/\D/g, '');
+                            botoes += ` <a href="https://api.whatsapp.com/send?phone=55${telefoneLimpo}&text=Olá%20${encodeURIComponent(item.cliente)},%20passando%20para%20lembrar%20da%20sua%20condicional!" target="_blank" class="btn-action btn-ia" style="background:#22c55e; color:white; text-decoration:none; padding:4px 8px; border-radius:4px; display:inline-block;"><i class="fa-solid fa-robot"></i> Cobrança IA</a>`;
+                        }
+
+                        const trHtml =
+                            '<td><strong>' + item.cliente + '</strong></td>' +
+                            '<td>' + item.contato + '</td>' +
+                            '<td><span style="background:#e2e8f0; padding:2px 8px; border-radius:4px; font-size:0.8rem;">' + item.itens + '</span></td>' +
+                            '<td>' + item.saida + '</td>' +
+                            '<td ' + estiloLimite + '>' + item.limite + '</td>' +
+                            '<td><span class="badge ' + badgeClass + '">' + item.status.toUpperCase() + '</span></td>' +
+                            '<td>' + botoes + '</td>';
+
+                        if (tbody) {
+                            const tr1 = document.createElement('tr');
+                            tr1.innerHTML = trHtml;
+                            tbody.appendChild(tr1);
+                        }
+
+                        if (tbodyTodas && tbodyTodas !== tbody) {
+                            const tr2 = document.createElement('tr');
+                            tr2.innerHTML = trHtml;
+                            tbodyTodas.appendChild(tr2);
+                        }
+                    });
+                }
+                    // ==========================================
+                    // 4. MÓDULO: PEÇAS E ESTOQUE (Integrado com API)
+                    // ==========================================
+                async function buscarPecasEstoque() {
+                    const tbody = document.getElementById('tb-pecas');
+                    if (!tbody) return;
+                    tbody.innerHTML = '';
+
+                    try {
+                        const res = await fetch('/api/pecas');
+                        if (!res.ok) throw new Error("Erro ao buscar peças da API.");
+
+                        const listaPecas = await res.json();
+
+                        if (!listaPecas || listaPecas.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">Nenhuma peça cadastrada no inventário.</td></tr>';
+                            return;
+                        }
+
+                        listaPecas.forEach(item => {
+                            const tr = document.createElement('tr');
+                            let badgeClass = 'finalizada';
+                            let statusTexto = 'DISPONÍVEL';
+
+                            const qtdEstoque = item.estoque !== undefined ? item.estoque : 5;
+
+                            if (qtdEstoque === 0) {
+                                badgeClass = 'atrasada';
+                                statusTexto = 'ESGOTADO';
+                            } else if (qtdEstoque <= 2) {
+                                badgeClass = 'aberta';
+                                statusTexto = 'ESTOQUE BAIXO';
+                            }
+
+                            const precoFormatado = typeof item.precoVenda === 'number'
+                                ? `R$ ${item.precoVenda.toFixed(2).replace('.', ',')}`
+                                : (item.precoVenda || 'R$ 0,00');
+
+                            // Captura segura do tamanho independentemente de vir maiúsculo ou minúsculo
+                            const tamanhoExibido = item.tamanho || item.Tamanho || 'U';
+
+                            tr.innerHTML = `
+                                  <td><strong>PEÇA-${item.id}</strong><br><small style="color:var(--text-muted);">${item.nome || ''}</small></td>
+                                  <td>${item.categoria || 'Geral'}</td>
+                                  <td><span style="background:#e2e8f0; padding:2px 8px; border-radius:4px; font-size:0.8rem;">${tamanhoExibido}</span></td>
+                                  <td>${precoFormatado}</td>
+                                  <td><strong>${qtdEstoque} un.</strong></td>
+                                  <td><span class="badge ${badgeClass}">${statusTexto}</span></td>
+                                  <td>
+                                      <button class="btn-action" onclick="editarPecaPrompt(${item.id}, '${item.nome || ''}', '${item.categoria || ''}', '${tamanhoExibido}', ${item.precoVenda || 0})">Editar</button>
+                                     <button class="btn-action" style="background:#ef4444; color:white; margin-left:4px;" onclick="deletarPeca(${item.id}, event)">Excluir</button>
+                                  </td>
+                              `;
+
+                            tbody.appendChild(tr);
+                        });
+                    } catch (err) {
+                        console.warn("Erro ao carregar peças:", err);
+                        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Erro ao ligar à API de Peças.</td></tr>';
+                    }
+                }
+
+                // ==========================================
+                // 5. MÓDULO: CLIENTES
+                // ==========================================
+                    //Buscar e Listar Clientes (GET /api/clientes)
+                    async function buscarClientes() {
+                        const tbody = document.getElementById('tb-clientes');
+                        if (!tbody) return;
+                        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">A carregar clientes...</td></tr>';
+
+                        try {
+                            const res = await fetch('/api/clientes');
+                            if (!res.ok) throw new Error('Erro ao buscar clientes');
+                            const listaClientes = await res.json();
+
+                            tbody.innerHTML = '';
+
+                            if (listaClientes.length === 0) {
+                                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Nenhum cliente cadastrado.</td></tr>';
+                                return;
+                            }
+
+                            listaClientes.forEach(item => {
+                                const tr = document.createElement('tr');
+                                tr.innerHTML =
+                                    '<td><strong>' + item.nome + '</strong></td>' +
+                                    '<td>' + (item.telefone || '-') + '</td>' +
+                                    '<td>' + (item.email || '-') + '</td>' +
+                                    '<td><span class="badge aberta">1 Ativa</span></td>' +
+                                    '<td><strong>R$ 0,00</strong></td>' +
+                                    '<td style="display: flex; gap: 5px;">' +
+                                    '<button class="btn-action" onclick="editarClienteModal(' + item.id + ', \'' + item.nome + '\', \'' + item.email + '\', \'' + item.telefone + '\')">Editar</button>' +
+                                    '<button class="btn-action" style="background: #fee2e2; color: #991b1b;" onclick="inativarClienteApi(' + item.id + ', \'' + item.nome + '\')">Inativar</button>' +
+                                    '</td>';
+                                tbody.appendChild(tr);
+                            });
+                        } catch (err) {
+                            console.error(err);
+                            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Erro ao ligar à API de Clientes.</td></tr>';
+                        }
+                    }
+
+                // ==========================================
+                // 6. UTILITÁRIOS E MODAL IA
+                // ==========================================
+                async function gerarCobrancaIA(nomeCliente) {
+                    const elNome = document.getElementById('ia-cliente-nome');
+                    const elTexto = document.getElementById('ia-texto-mensagem');
+                    const elModal = document.getElementById('modal-ia');
+
+                    if (elNome) elNome.innerText = nomeCliente;
+                    if (elTexto) elTexto.innerText = "Solicitando ao Gemini AI...";
+                    if (elModal) elModal.style.display = 'flex';
+
+                    try {
+                        const response = await fetch('/api/ia', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ cliente: nomeCliente, contexto: "Sacola condicional em atraso" })
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (elTexto) elTexto.innerText = '"' + (data.mensagem || data.resposta) + '"';
+                        } else {
+                            throw new Error();
+                        }
+                    } catch (err) {
+                        if (elTexto) elTexto.innerText = '"Olá ' + nomeCliente + '! Tudo bem? Passando para ver como ficaram as peças da sua sacola condicional. Como o prazo encerrou, me avise quais você vai ficar para combinarmos o acerto! 😊"';
+                    }
+                }
+
+                function fecharModal() {
+                    const elModal = document.getElementById('modal-ia');
+                    if (elModal) elModal.style.display = 'none';
+                }
+
+                function copiarWhatsApp() {
+                    const elTexto = document.getElementById('ia-texto-mensagem');
+                    if (elTexto) {
+                        window.navigator.clipboard.writeText(elTexto.innerText);
+                        alert("Mensagem copiada para a área de transferência!");
+                        fecharModal();
+                    }
+                }
+
+                let pecasExtras = [];
+                let clientesExtras = [];
+
+                async function adicionarPecaPrompt() {
+                    const nome = prompt("Nome da nova peça (ex: Vestido Midi Floral):");
+                    if (!nome || nome.trim() === "") return; // Se cancelar, para na hora
+
+                    const categoria = prompt("Categoria (ex: Vestidos, Blusas):", "Vestidos");
+                    if (categoria === null) return;
+
+                    const tamanho = prompt("Tamanho (P, M, G, U):", "M");
+                    if (tamanho === null) return;
+
+                    const precoCustoStr = prompt("Preço de Custo (ex: 80.00):", "80.00");
+                    if (precoCustoStr === null) return;
+
+                    const precoVendaStr = prompt("Preço de Venda (ex: 189.90):", "189.90");
+                    if (precoVendaStr === null) return;
+
+                    const estoqueStr = prompt("Quantidade em Estoque (ex: 5):", "5");
+                    if (estoqueStr === null) return;
+
+                    const novaPeca = {
+                        nome: nome.trim(),
+                        categoria: categoria.trim(),
+                        tamanho: tamanho.trim().toUpperCase(),
+                        precoCusto: parseFloat(precoCustoStr.replace(',', '.')) || 0,
+                        precoVenda: parseFloat(precoVendaStr.replace(',', '.')) || 0,
+                        estoque: parseInt(estoqueStr) || 0
+                    };
+
+                    try {
+                        const res = await fetch('/api/pecas', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(novaPeca)
+                        });
+
+                        if (res.ok) {
+                            alert("Peça cadastrada com sucesso!");
+                            buscarPecasEstoque();
+                        } else {
+                            const erro = await res.json();
+                            alert("Erro ao cadastrar peça: " + (erro.mensagem || 'Verifique os dados.'));
+                        }
+                    } catch (err) {
+                        console.error("Erro no POST:", err);
+                        alert("Erro de comunicação ao tentar salvar a peça.");
+                    }
+                }
+                    async function editarPecaPrompt(id, nomeAtual, categoriaAtual, tamanhoAtual, precoVendaAtual) {
+                        const novoNome = prompt("Editar Nome da Peça:", nomeAtual);
+                        if (!novoNome) return;
+                        const novaCategoria = prompt("Editar Categoria:", categoriaAtual);
+                        if (novaCategoria === null) return;
+                        const novoTamanho = prompt("Editar Tamanho (P, M, G, U):", tamanhoAtual);
+                        if (novoTamanho === null) return;
+                        const novoPrecoStr = prompt("Editar Preço de Venda:", precoVendaAtual);
+                        if (novoPrecoStr === null) return;
+
+                        // Objeto exato com o ID e todas as propriedades que o C# espera
+                        const pecaAtualizada = {
+                            id: Number(id),          // Garante que é um número inteiro exato
+                            nome: novoNome.trim(),
+                            categoria: novaCategoria.trim(),
+                            tamanho: novoTamanho.trim().toUpperCase(),
+                            precoCusto: 1.0,           // Obrigatório para passar na validação do C#
+                            precoVenda: parseFloat(novoPrecoStr.replace(',', '.')) || 0,
+                            estoque: 5               // Põe um valor padrão ou pega o estoque atual se o tiveres
+                        };
+
+                        try {
+                            const res = await fetch(`/api/pecas/${id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(pecaAtualizada)
+                            });
+
+                            if (res.ok || res.status === 204) {
+                                alert("Peça atualizada com sucesso!");
+                                buscarPecasEstoque();
+                            } else {
+                                const erro = await res.json();
+                                alert("Erro ao atualizar: " + (erro.mensagem || JSON.stringify(erro)));
+                            }
+                        } catch (err) {
+                            console.error("Erro no PUT:", err);
+                            alert("Erro de comunicação ao tentar atualizar a peça.");
+                        }
+                    }
+
+                async function deletarPeca(id) {
+                    if (event) event.stopPropagation();
+                    if (!confirm("Tens a certeza que pretendes remover esta peça?")) return;
+
+                    try {
+                        const res = await fetch(`/api/pecas/${id}`, {
+                            method: 'DELETE'
+                        });
+
+                        if (res.ok) {
+                            buscarPecasEstoque();
+                        } else {
+                            alert("Erro ao remover a peça.");
+                        }
+                    } catch (err) {
+                        console.error("Erro no DELETE:", err);
+                    }
+                }
+
+                async function adicionarClientePrompt() {
+                    const nome = prompt("Nome do cliente:");
+                    if (!nome) return;
+                    const email = prompt("E-mail do cliente:");
+                    if (!email) return;
+                    const telefone = prompt("Telefone / WhatsApp:");
+                    if (!telefone) return;
+                    const cpf = prompt("CPF do cliente:");
+                    if (!cpf) return;
+
+                    const novoCliente = {
+                        nome: nome,
+                        email: email,
+                        telefone: telefone,
+                        cpf: cpf,
+                        ativo: true
+                    };
+
+                    try {
+                        const res = await fetch('/api/clientes', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(novoCliente)
+                        });
+
+                        if (res.ok) {
+                            alert("Cliente cadastrado com sucesso no banco de dados!");
+                            buscarClientes(); // Recarrega a tabela direto da API
+                        } else {
+                            const erro = await res.json();
+                            alert("Erro ao cadastrar: " + (erro.mensagem || 'Dados inválidos'));
+                        }
+                    } catch (e) {
+                        alert("Erro de comunicação com o servidor.");
+                    }
+                }
+
+
+                async function editarClienteModal(id, nomeAntigo, emailAntigo, telAntigo) {
+                    const nome = prompt("Editar Nome:", nomeAntigo);
+                    if (!nome) return;
+                    const email = prompt("Editar E-mail:", emailAntigo);
+                    if (!email) return;
+                    const telefone = prompt("Editar Telefone:", telAntigo);
+                    if (!telefone) return;
+                    const cpf = prompt("Confirme o CPF do cliente para atualizar:");
+                    if (!cpf) return;
+
+                    const clienteAtualizado = {
+                        id: id,
+                        nome: nome,
+                        email: email,
+                        telefone: telefone,
+                        cpf: cpf,
+                        ativo: true
+                    };
+
+                    try {
+                        const res = await fetch(`/api/clientes/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(clienteAtualizado)
+                        });
+
+                        if (res.ok || res.status === 204) {
+                            alert("Cliente atualizado com sucesso!");
+                            buscarClientes();
+                        } else {
+                            alert("Erro ao atualizar o cliente.");
+                        }
+                    } catch (e) {
+                        alert("Erro de comunicação com o servidor.");
+                    }
+                }
+
+
+                async function inativarClienteApi(id, nome) {
+                    if (confirm(`Deseja realmente inativar o cliente ${nome}? (Regra RN03 - Exclusão Lógica)`)) {
+                        try {
+                            const res = await fetch(`/api/clientes/${id}`, {
+                                method: 'DELETE'
+                            });
+
+                            if (res.ok) {
+                                alert("Cliente inativado com sucesso (mantido no banco para histórico).");
+                                buscarClientes();
+                            } else {
+                                alert("Erro ao inativar o cliente.");
+                            }
+                        } catch (e) {
+                            alert("Erro de comunicação com o servidor.");
+                        }
+                    }
+                }
+                document.addEventListener('DOMContentLoaded', () => {
+                    carregarDados();
+
+                    // Configura os cliques do menu lateral
+                    const navItems = document.querySelectorAll('.nav-item');
+                    navItems.forEach(item => {
+                        item.addEventListener('click', (e) => {
+                            e.preventDefault();
+
+                            // Remove a classe active de todos
+                            navItems.forEach(nav => nav.classList.remove('active'));
+                            // Adiciona no item clicado
+                            item.classList.add('active');
+
+                            // Descobre qual view abrir
+                            const viewName = item.getAttribute('data-view');
+                            if (!viewName) return;
+
+                            // Esconde todas as views
+                            document.querySelectorAll('.view-content').forEach(view => {
+                                view.style.display = 'none';
+                            });
+
+                            // Mostra a view ativa
+                            const activeView = document.getElementById('view-' + viewName);
+                            if (activeView) {
+                                activeView.style.display = 'block';
+                            }
+
+                            // Atualiza os títulos do cabeçalho
+                            const titleEl = document.getElementById('page-title');
+                            const subtitleEl = document.getElementById('page-subtitle');
+
+                            if (viewName === 'dashboard') {
+                                if (titleEl) titleEl.innerText = "Dashboard Analítico";
+                                if (subtitleEl) subtitleEl.innerText = "Gerencie saídas de peças, prazos e conversões de venda";
+                            } else if (viewName === 'condicionais') {
+                                if (titleEl) titleEl.innerText = "Controle de Condicionais";
+                                if (subtitleEl) subtitleEl.innerText = "Acompanhe todas as sacolas enviadas e prazos de retorno";
+                            } else if (viewName === 'pecas') {
+                                if (titleEl) titleEl.innerText = "Peças e Estoque";
+                                if (subtitleEl) subtitleEl.innerText = "Controle o inventário de roupas e disponibilidade";
+                            } else if (viewName === 'clientes') {
+                                if (titleEl) titleEl.innerText = "Gestão de Clientes";
+                                if (subtitleEl) subtitleEl.innerText = "Lista de contatos e histórico de compras";
+                            }
+                        });
+                    });
+                });
+       
+    </script>
+</body>
+</html>

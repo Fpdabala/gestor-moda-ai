@@ -41,12 +41,13 @@ namespace GestorModaAi.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
+            // Valida se já existe um cliente com o mesmo WhatsApp no banco
             var existeCliente = await _context.Clientes
-                .AnyAsync(c => c.Cpf == cliente.Cpf || c.Email == cliente.Email);
+                .AnyAsync(c => c.Whatsapp == cliente.Whatsapp);
 
             if (existeCliente)
             {
-                return BadRequest(new { mensagem = "Já existe um cliente cadastrado com este CPF ou E-mail." });
+                return BadRequest(new { mensagem = "Já existe um cliente cadastrado com este WhatsApp." });
             }
 
             cliente.Ativo = true;
@@ -71,9 +72,17 @@ namespace GestorModaAi.Controllers
                 return NotFound(new { mensagem = "Cliente não encontrado." });
             }
 
+            // Atualiza apenas os campos reais da base de dados
             clienteExistente.Nome = cliente.Nome;
-            clienteExistente.Email = cliente.Email;
-            clienteExistente.Telefone = cliente.Telefone;
+            clienteExistente.Whatsapp = cliente.Whatsapp;
+            clienteExistente.TamanhoPreferido = cliente.TamanhoPreferido;
+            clienteExistente.Estilo = cliente.Estilo;
+
+            // Garante que a data mantém o formato UTC para evitar erros do Npgsql
+            if (clienteExistente.CriadoEm.Kind == DateTimeKind.Unspecified)
+            {
+                clienteExistente.CriadoEm = DateTime.SpecifyKind(clienteExistente.CriadoEm, DateTimeKind.Utc);
+            }
 
             _context.Entry(clienteExistente).State = EntityState.Modified;
 
